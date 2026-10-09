@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -130,7 +130,7 @@ export const MineSafetyTab: React.FC = () => {
               { label: 'Compliance Rate',  value: '94.7%', color: 'text-teal-400',   sub: '↑ vs 89.2% prev' },
             ].map((stat, i) => (
               <div key={i} className="glass-card rounded-xl px-4 py-3 text-center min-w-[110px]">
-                <div className={	ext-2xl font-extrabold }>{stat.value}</div>
+                <div className={`text-2xl font-extrabold ${stat.color}`}>{stat.value}</div>
                 <div className="text-[10px] text-slate-400 font-medium mt-1">{stat.label}</div>
                 {stat.live ? (
                   <div className="flex items-center justify-center space-x-1 mt-1">
@@ -153,8 +153,8 @@ export const MineSafetyTab: React.FC = () => {
           const isActive = activeView === v.id;
           return (
             <button key={v.id} onClick={() => setActiveView(v.id)}
-              className={lex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all flex-1 justify-center }>
-              <Icon className={w-3.5 h-3.5 } />
+              className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all flex-1 justify-center ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
+              <Icon className="w-3.5 h-3.5" />
               <span>{v.label}</span>
             </button>
           );
@@ -166,7 +166,7 @@ export const MineSafetyTab: React.FC = () => {
         <div className="space-y-6">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             {safetyKPIs.map((kpi, idx) => (
-              <div key={idx} className="glass-card rounded-2xl p-4 card-3d animate-slide-up" style={{ animationDelay: ${idx * 0.06}s }}>
+              <div key={idx} className="glass-card rounded-2xl p-4 card-3d animate-slide-up" style={{ animationDelay: `${idx * 0.06}s` }}>
                 <div className="text-2xl font-extrabold text-slate-900">{kpi.value}{kpi.unit}</div>
                 <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wide mt-1">{kpi.label}</div>
                 <div className="text-[10px] text-emerald-600 font-semibold mt-1">↓ vs {kpi.prev}{kpi.unit}</div>
@@ -211,7 +211,7 @@ export const MineSafetyTab: React.FC = () => {
                           : <span className="text-[9px] bg-emerald-100 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded-full font-bold">✓ Zero Fatal</span>}
                       </div>
                       <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                        <div className={h-2 rounded-full } style={{ width: ${sub.compliance}% }} />
+                        <div className={`h-2 rounded-full ${sub.compliance >= 95 ? 'bg-emerald-500' : 'bg-amber-500'}`} style={{ width: `${sub.compliance}%` }} />
                       </div>
                     </div>
                     <span className="text-[10px] text-slate-500 font-medium w-20 text-right">{sub.inspections} insp</span>
@@ -237,14 +237,14 @@ export const MineSafetyTab: React.FC = () => {
             <div className="lg:col-span-2 space-y-3">
               {filteredIncidents.map(inc => (
                 <div key={inc.id} onClick={() => setSelectedIncident(inc)}
-                  className={glass-card rounded-2xl p-4 cursor-pointer transition-all card-lift border }>
+                  className={`glass-card rounded-2xl p-4 cursor-pointer transition-all card-lift border ${selectedIncident?.id === inc.id ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200/60'}`}>
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-mono text-[10px] font-bold text-slate-600">{inc.id}</span>
-                    <span className={	ext-[9px] font-bold px-2 py-0.5 rounded-full border }>{inc.severity}</span>
+                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${severityColor(inc.severity)}`}>{inc.severity}</span>
                   </div>
                   <h4 className="text-xs font-bold text-slate-900 mb-1">{inc.mine}</h4>
                   <div className="text-[10px] text-slate-500 mb-2">{inc.type} • {inc.date}</div>
-                  <span className={	ext-[9px] font-bold px-2 py-0.5 rounded-full border }>{inc.status}</span>
+                  <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${statusColor(inc.status)}`}>{inc.status}</span>
                 </div>
               ))}
             </div>
@@ -254,7 +254,7 @@ export const MineSafetyTab: React.FC = () => {
                   <div className="pb-4 border-b border-slate-100">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-mono text-sm font-bold text-slate-800">{selectedIncident.id}</span>
-                      <span className={	ext-[10px] font-bold px-2.5 py-0.5 rounded-full border }>{selectedIncident.severity}</span>
+                      <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${severityColor(selectedIncident.severity)}`}>{selectedIncident.severity}</span>
                     </div>
                     <h3 className="text-base font-bold text-slate-900 mb-1">{selectedIncident.mine}</h3>
                     <div className="flex items-center space-x-3 text-[10px] text-slate-500">
@@ -271,7 +271,7 @@ export const MineSafetyTab: React.FC = () => {
                       <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">DGMS Reference</div>
                       <div className="font-mono text-[11px] font-bold text-slate-800">{selectedIncident.dgmsRef}</div>
                     </div>
-                    <div className={ounded-xl p-3.5 border }>
+                    <div className={`rounded-xl p-3.5 border ${statusColor(selectedIncident.status)}`}>
                       <div className="text-[10px] font-bold uppercase tracking-wide mb-1.5 opacity-70">Status</div>
                       <div className="text-[11px] font-bold">{selectedIncident.status}</div>
                     </div>
@@ -304,7 +304,7 @@ export const MineSafetyTab: React.FC = () => {
             ].map((item, idx) => {
               const Icon = item.icon;
               return (
-                <div key={idx} className="glass-card rounded-2xl p-5 card-3d animate-slide-up" style={{ animationDelay: ${idx * 0.08}s }}>
+                <div key={idx} className="glass-card rounded-2xl p-5 card-3d animate-slide-up" style={{ animationDelay: `${idx * 0.08}s` }}>
                   <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-lg mb-3">
                     <Icon className="w-4 h-4" />
                   </div>
@@ -349,10 +349,10 @@ export const MineSafetyTab: React.FC = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {shiftData.map((shift, idx) => (
-              <div key={idx} className="glass-card rounded-2xl p-6 card-3d animate-slide-up" style={{ animationDelay: ${idx * 0.1}s }}>
+              <div key={idx} className="glass-card rounded-2xl p-6 card-3d animate-slide-up" style={{ animationDelay: `${idx * 0.1}s` }}>
                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100/60">
                   <div className="flex items-center space-x-2">
-                    <span className={w-2.5 h-2.5 rounded-full  animate-pulse} />
+                    <span className={`w-2.5 h-2.5 rounded-full ${shift.incidents > 0 ? 'bg-amber-500' : 'bg-emerald-500'} animate-pulse`} />
                     <span className="font-bold text-xs text-slate-900">{shift.shift}</span>
                   </div>
                   {shift.incidents > 0
@@ -360,14 +360,14 @@ export const MineSafetyTab: React.FC = () => {
                     : <span className="text-[9px] bg-emerald-100 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full font-bold">✓ Clear</span>}
                 </div>
                 <div className="space-y-3">
-                  {[['Workers On-Shift', shift.workers.toLocaleString(), 'text-slate-900'], ['Production (MT)', String(shift.production_mt), 'text-emerald-700'], ['Efficiency', ${shift.efficiency}%, 'text-violet-700']].map(([label, val, cls]) => (
+                  {[['Workers On-Shift', shift.workers.toLocaleString(), 'text-slate-900'], ['Production (MT)', String(shift.production_mt), 'text-emerald-700'], ['Efficiency', `${shift.efficiency}%`, 'text-violet-700']].map(([label, val, cls]) => (
                     <div key={label} className="flex justify-between items-center">
                       <span className="text-[10px] text-slate-500 font-medium">{label}</span>
-                      <span className={ont-extrabold text-sm }>{val}</span>
+                      <span className={`font-extrabold text-sm ${cls}`}>{val}</span>
                     </div>
                   ))}
                   <div className="w-full bg-slate-100 rounded-full h-2">
-                    <div className="h-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500" style={{ width: ${shift.efficiency}% }} />
+                    <div className="h-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500" style={{ width: `${shift.efficiency}%` }} />
                   </div>
                 </div>
               </div>
